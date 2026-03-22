@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Attendance{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Member Check-in</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('check_in') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="member_id" class="form-label">Select Member</label>
+                        <select class="form-select" id="member_id" name="member_id" required>
+                            <option value="">Select Member...</option>
+                            {% for member in members %}
+                            <option value="{{ member.id }}">{{ member.first_name }} {{ member.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-success">Check In</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Today's Attendance</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Time</th>
+                                <th>Member</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for record in attendance %}
+                            <tr>
+                                <td>{{ record.check_in_time.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>{{ record.member.first_name }} {{ record.member.last_name }}</td>
+                                <td><span class="badge bg-success">Checked In</span></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

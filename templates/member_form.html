@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm col-md-8 mx-auto">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">{{ title }} Information</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="first_name" class="form-label">First Name</label>
+                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ member.first_name if member else '' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="last_name" class="form-label">Last Name</label>
+                    <input type="text" class="form-control" id="last_name" name="last_name" value="{{ member.last_name if member else '' }}" required>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" value="{{ member.email if member else '' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="phone" class="form-label">Phone</label>
+                    <input type="text" class="form-control" id="phone" name="phone" value="{{ member.phone if member else '' }}" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="address" class="form-label">Address</label>
+                <textarea class="form-control" id="address" name="address" rows="2">{{ member.address if member else '' }}</textarea>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="plan_id" class="form-label">Membership Plan</label>
+                    <select class="form-select" id="plan_id" name="plan_id" required>
+                        <option value="">Select a plan...</option>
+                        {% for plan in plans %}
+                        <option value="{{ plan.id }}" {% if member and member.membership_plan_id == plan.id %}selected{% endif %}>
+                            {{ plan.name }} (${{ plan.price }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% if member %}
+                <div class="col-md-6">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="Active" {% if member.status == 'Active' %}selected{% endif %}>Active</option>
+                        <option value="Inactive" {% if member.status == 'Inactive' %}selected{% endif %}>Inactive</option>
+                        <option value="Expired" {% if member.status == 'Expired' %}selected{% endif %}>Expired</option>
+                    </select>
+                </div>
+                {% endif %}
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+                <a href="{{ url_for('members') }}" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Member</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
