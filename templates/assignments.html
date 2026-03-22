@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}Workout Assignments{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Assign Workout</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('add_assignment') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="member_id" class="form-label">Member</label>
+                        <select class="form-select" id="member_id" name="member_id" required>
+                            <option value="">Select Member...</option>
+                            {% for m in members %}
+                            <option value="{{ m.id }}">{{ m.first_name }} {{ m.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="workout_id" class="form-label">Workout Template</label>
+                        <select class="form-select" id="workout_id" name="workout_id" required>
+                            <option value="">Select Workout...</option>
+                            {% for w in workouts %}
+                            <option value="{{ w.id }}">{{ w.title }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Assign Workout</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Active Assignments</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Member</th>
+                                <th>Workout Plan</th>
+                                <th>Assigned Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for a in assignments %}
+                            <tr>
+                                <td>{{ a.member.first_name }} {{ a.member.last_name }}</td>
+                                <td>{{ a.workout.title }}</td>
+                                <td>{{ a.start_date.strftime('%Y-%m-%d') }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

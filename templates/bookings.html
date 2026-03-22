@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Class Bookings{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">New Booking</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('add_booking') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="member_id" class="form-label">Select Member</label>
+                        <select class="form-select" id="member_id" name="member_id" required>
+                            <option value="">Select Member...</option>
+                            {% for member in members %}
+                            <option value="{{ member.id }}">{{ member.first_name }} {{ member.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="class_id" class="form-label">Select Class</label>
+                        <select class="form-select" id="class_id" name="class_id" required>
+                            <option value="">Select Class...</option>
+                            {% for class in classes %}
+                            <option value="{{ class.id }}">{{ class.name }} ({{ class.schedule_time }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Book Class</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Upcoming Bookings</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Member</th>
+                                <th>Time</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in bookings %}
+                            <tr>
+                                <td>{{ booking.gym_class.name }}</td>
+                                <td>{{ booking.member_ref.first_name }} {{ booking.member_ref.last_name }}</td>
+                                <td>{{ booking.gym_class.schedule_time }}</td>
+                                <td>
+                                    <a href="{{ url_for('delete_booking', id=booking.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Cancel this booking?')">
+                                        Cancel
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

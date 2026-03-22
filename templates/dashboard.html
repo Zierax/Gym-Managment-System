@@ -3,6 +3,7 @@
 {% block title %}Dashboard Overview{% endblock %}
 
 {% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 g-4 mb-4">
     <div class="col">
         <div class="card h-100 border-start border-primary border-4 shadow-sm">
@@ -64,6 +65,76 @@
             </div>
         </div>
     </div>
+    <div class="col">
+        <div class="card h-100 border-start border-danger border-4 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-danger text-white rounded-circle p-3">
+                        <i class="fas fa-user-tie fa-2x"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title mb-1">Trainers</h6>
+                        <h3 class="mb-0">{{ stats.total_trainers }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 border-start border-dark border-4 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-dark text-white rounded-circle p-3">
+                        <i class="fas fa-dumbbell fa-2x"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title mb-1">Active Classes</h6>
+                        <h3 class="mb-0">{{ stats.active_classes }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="card h-100 border-start border-secondary border-4 shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-secondary text-white rounded-circle p-3">
+                        <i class="fas fa-boxes fa-2x"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <h6 class="card-title mb-1">Shop Items</h6>
+                        <h3 class="mb-0">{{ stats.inventory_count }}</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Revenue Chart -->
+    <div class="col-md-7 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Monthly Revenue Growth</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <!-- Plan Distribution Chart -->
+    <div class="col-md-5 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white">
+                <h5 class="card-title mb-0">Membership Distribution</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="planChart"></canvas>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row">
@@ -115,4 +186,38 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Revenue Chart
+    const revCtx = document.getElementById('revenueChart').getContext('2d');
+    new Chart(revCtx, {
+        type: 'line',
+        data: {
+            labels: {{ revenue_labels|tojson }},
+            datasets: [{
+                label: 'Revenue ($)',
+                data: {{ revenue_values|tojson }},
+                borderColor: '#007bff',
+                backgroundColor: 'rgba(0, 123, 255, 0.1)',
+                fill: true,
+                tension: 0.3
+            }]
+        },
+        options: { responsive: true }
+    });
+
+    // Plan Distribution Chart
+    const planCtx = document.getElementById('planChart').getContext('2d');
+    new Chart(planCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ plan_names|tojson }},
+            datasets: [{
+                data: {{ plan_member_counts|tojson }},
+                backgroundColor: ['#007bff', '#28a745', '#ffc107', '#17a2b8', '#dc3545']
+            }]
+        },
+        options: { responsive: true }
+    });
+</script>
 {% endblock %}

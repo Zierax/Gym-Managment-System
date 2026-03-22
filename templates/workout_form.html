@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm col-md-8 mx-auto">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Workout Details</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Workout Title</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea class="form-control" id="description" name="description" rows="2"></textarea>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Select Exercises</label>
+                <div class="row row-cols-2">
+                    {% for ex in exercises %}
+                    <div class="col mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="exercises" value="{{ ex.id }}" id="ex{{ ex.id }}">
+                            <label class="form-check-label" for="ex{{ ex.id }}">
+                                {{ ex.name }} <small class="text-muted">({{ ex.category }})</small>
+                            </label>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+                <a href="{{ url_for('workouts') }}" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Workout</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

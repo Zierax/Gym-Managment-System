@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Renew Membership: {{ member.first_name }}{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm col-md-6 mx-auto">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Select Renewal Plan</h5>
+    </div>
+    <div class="card-body">
+        <p class="text-muted small">Member: {{ member.first_name }} {{ member.last_name }}<br>Current Expiry: {{ member.expiry_date.strftime('%Y-%m-%d') }}</p>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="plan_id" class="form-label">New Plan</label>
+                <select class="form-select" id="plan_id" name="plan_id" required>
+                    {% for plan in plans %}
+                    <option value="{{ plan.id }}" {% if member.membership_plan_id == plan.id %}selected{% endif %}>{{ plan.name }} (${{ plan.price }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="payment_method" class="form-label">Payment Method</label>
+                <select class="form-select" id="payment_method" name="payment_method" required>
+                    <option value="Cash">Cash</option>
+                    <option value="Card">Card</option>
+                    <option value="Online">Online</option>
+                </select>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+                <a href="{{ url_for('member_detail', id=member.id) }}" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-success">Renew Now</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

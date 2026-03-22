@@ -1,0 +1,130 @@
+{% extends 'base.html' %}
+
+{% block title %}Member Details: {{ member.first_name }} {{ member.last_name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Member Info Card -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <div class="mb-3">
+                    <i class="fas fa-user-circle fa-5x text-secondary"></i>
+                </div>
+                <h4>{{ member.first_name }} {{ member.last_name }}</h4>
+                <p class="text-muted">{{ member.email }}</p>
+                <div class="mb-3">
+                    {% if member.status == 'Active' %}
+                    <span class="badge bg-success">Active</span>
+                    {% elif member.status == 'Expired' %}
+                    <span class="badge bg-danger">Expired</span>
+                    {% else %}
+                    <span class="badge bg-secondary">{{ member.status }}</span>
+                    {% endif %}
+                </div>
+                <hr>
+                <div class="text-start">
+                    <p><strong>Phone:</strong> {{ member.phone }}</p>
+                    <p><strong>Address:</strong> {{ member.address }}</p>
+                    <p><strong>Joined:</strong> {{ member.join_date.strftime('%Y-%m-%d') }}</p>
+                    <p><strong>Expiry:</strong> {{ member.expiry_date.strftime('%Y-%m-%d') }}</p>
+                    <p><strong>Plan:</strong> {{ member.plan.name }} (${{ member.plan.price }})</p>
+                </div>
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('renew_member', id=member.id) }}" class="btn btn-success btn-sm">Renew Membership</a>
+                    <a href="{{ url_for('edit_member', id=member.id) }}" class="btn btn-outline-primary btn-sm">Edit Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Member History -->
+    <div class="col-md-8">
+        <!-- Payments -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Payment History</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Method</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for payment in member.payments|reverse %}
+                            <tr>
+                                <td>{{ payment.payment_date.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>${{ payment.amount }}</td>
+                                <td>{{ payment.payment_method }}</td>
+                                <td class="text-end">
+                                    <a href="{{ url_for('view_invoice', id=payment.id) }}" class="btn btn-link btn-sm p-0">Invoice</a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="3" class="text-center">No payments found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Attendance -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Attendance History (Recent)</h5>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for record in member.attendance|reverse %}
+                    {% if loop.index <= 10 %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span><i class="fas fa-check-circle text-success me-2"></i> Checked in</span>
+                        <span class="text-muted">{{ record.check_in_time.strftime('%Y-%m-%d %H:%M') }}</span>
+                    </li>
+                    {% endif %}
+                    {% else %}
+                    <li class="list-group-item text-center">No attendance records.</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+        <!-- Bookings -->
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Class Bookings</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Time</th>
+                                <th>Trainer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in member.bookings_list %}
+                            <tr>
+                                <td>{{ booking.gym_class.name }}</td>
+                                <td>{{ booking.gym_class.schedule_time }}</td>
+                                <td>{{ booking.gym_class.trainer.name }}</td>
+                            </tr>
+                            {% else %}
+                            <tr><td colspan="3" class="text-center">No bookings found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

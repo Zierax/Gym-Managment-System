@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+
+{% block title %}Diet Plans{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">New Diet Plan</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('add_diet_plan') }}" method="POST">
+                    <div class="mb-3">
+                        <label for="member_id" class="form-label">Member</label>
+                        <select class="form-select" id="member_id" name="member_id" required>
+                            <option value="">Select Member...</option>
+                            {% for m in members %}
+                            <option value="{{ m.id }}">{{ m.first_name }} {{ m.last_name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Plan Title</label>
+                        <input type="text" class="form-control" id="title" name="title" placeholder="e.g. Keto Weight Loss" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Plan Details</label>
+                        <textarea class="form-control" id="description" name="description" rows="4" required></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Create Diet Plan</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Existing Diet Plans</h5>
+            </div>
+            <div class="card-body">
+                <div class="row row-cols-1 g-3">
+                    {% for diet in diets %}
+                    <div class="col">
+                        <div class="card border-0 bg-light shadow-sm">
+                            <div class="card-body">
+                                <h6 class="card-title text-primary">{{ diet.title }} (Member: {{ diet.member.first_name }} {{ diet.member.last_name }})</h6>
+                                <p class="card-text small">{{ diet.description }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

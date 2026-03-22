@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+
+{% block title %}Internal Messaging{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">New Message</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="receiver_id" class="form-label">Send To</label>
+                        <select class="form-select" id="receiver_id" name="receiver_id" required>
+                            <option value="">Select User...</option>
+                            {% for u in users %}
+                            <option value="{{ u.id }}">{{ u.username }} ({{ u.role }})</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="content" class="form-label">Message</label>
+                        <textarea class="form-control" id="content" name="content" rows="4" required></textarea>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <nav>
+            <div class="nav nav-tabs mb-3" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-inbox-tab" data-bs-toggle="tab" data-bs-target="#nav-inbox" type="button" role="tab">Inbox</button>
+                <button class="nav-link" id="nav-sent-tab" data-bs-toggle="tab" data-bs-target="#nav-sent" type="button" role="tab">Sent</button>
+            </div>
+        </nav>
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-inbox" role="tabpanel">
+                {% for msg in received %}
+                <div class="card mb-2 shadow-sm border-0 bg-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h6 class="mb-0">From: {{ msg.sender.username }}</h6>
+                            <small class="text-muted">{{ msg.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                        </div>
+                        <p class="mb-0">{{ msg.content }}</p>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-center text-muted py-5">No messages received.</p>
+                {% endfor %}
+            </div>
+            <div class="tab-pane fade" id="nav-sent" role="tabpanel">
+                {% for msg in sent %}
+                <div class="card mb-2 shadow-sm border-0 bg-light">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <h6 class="mb-0">To: {{ msg.receiver.username }}</h6>
+                            <small class="text-muted">{{ msg.timestamp.strftime('%Y-%m-%d %H:%M') }}</small>
+                        </div>
+                        <p class="mb-0">{{ msg.content }}</p>
+                    </div>
+                </div>
+                {% else %}
+                <p class="text-center text-muted py-5">No sent messages.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

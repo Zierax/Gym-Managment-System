@@ -27,19 +27,72 @@
                     <a href="{{ url_for('dashboard') }}" class="{% if request.endpoint == 'dashboard' %}active{% endif %}">
                         <i class="fas fa-tachometer-alt me-2"></i> Dashboard
                     </a>
+
+                    <div class="px-3 py-2 text-uppercase small text-muted">Management</div>
                     <a href="{{ url_for('members') }}" class="{% if request.endpoint == 'members' %}active{% endif %}">
                         <i class="fas fa-users me-2"></i> Members
                     </a>
                     <a href="{{ url_for('plans') }}" class="{% if request.endpoint == 'plans' %}active{% endif %}">
                         <i class="fas fa-list-alt me-2"></i> Membership Plans
                     </a>
-                    <a href="{{ url_for('payments') }}" class="{% if request.endpoint == 'payments' %}active{% endif %}">
-                        <i class="fas fa-credit-card me-2"></i> Payments
+                    <a href="{{ url_for('trainers') }}" class="{% if request.endpoint == 'trainers' %}active{% endif %}">
+                        <i class="fas fa-user-tie me-2"></i> Trainers
                     </a>
+                    {% if current_user.role == 'Admin' %}
+                    <a href="{{ url_for('staff') }}" class="{% if request.endpoint == 'staff' %}active{% endif %}">
+                        <i class="fas fa-user-shield me-2"></i> Staff
+                    </a>
+                    {% endif %}
+
+                    <div class="px-3 py-2 text-uppercase small text-muted">Operations</div>
                     <a href="{{ url_for('attendance') }}" class="{% if request.endpoint == 'attendance' %}active{% endif %}">
                         <i class="fas fa-calendar-check me-2"></i> Attendance
                     </a>
-                    <a href="{{ url_for('logout') }}" class="mt-5">
+                    <a href="{{ url_for('classes') }}" class="{% if request.endpoint == 'classes' %}active{% endif %}">
+                        <i class="fas fa-dumbbell me-2"></i> Classes
+                    </a>
+                    <a href="{{ url_for('bookings') }}" class="{% if request.endpoint == 'bookings' %}active{% endif %}">
+                        <i class="fas fa-calendar-alt me-2"></i> Bookings
+                    </a>
+
+                    <div class="px-3 py-2 text-uppercase small text-muted">Fitness & Health</div>
+                    <a href="{{ url_for('exercises') }}" class="{% if request.endpoint == 'exercises' %}active{% endif %}">
+                        <i class="fas fa-running me-2"></i> Exercises
+                    </a>
+                    <a href="{{ url_for('workouts') }}" class="{% if request.endpoint == 'workouts' %}active{% endif %}">
+                        <i class="fas fa-file-alt me-2"></i> Workout Plans
+                    </a>
+                    <a href="{{ url_for('assignments') }}" class="{% if request.endpoint == 'assignments' %}active{% endif %}">
+                        <i class="fas fa-user-clock me-2"></i> Assignments
+                    </a>
+                    <a href="{{ url_for('diet_plans') }}" class="{% if request.endpoint == 'diet_plans' %}active{% endif %}">
+                        <i class="fas fa-utensils me-2"></i> Diet Plans
+                    </a>
+                    <a href="{{ url_for('progress') }}" class="{% if request.endpoint == 'progress' %}active{% endif %}">
+                        <i class="fas fa-chart-line me-2"></i> Progress
+                    </a>
+
+                    <div class="px-3 py-2 text-uppercase small text-muted">Shop & Finance</div>
+                    {% if current_user.role == 'Admin' %}
+                    <a href="{{ url_for('inventory') }}" class="{% if request.endpoint == 'inventory' %}active{% endif %}">
+                        <i class="fas fa-boxes me-2"></i> Inventory
+                    </a>
+                    {% endif %}
+                    <a href="{{ url_for('sales') }}" class="{% if request.endpoint == 'sales' %}active{% endif %}">
+                        <i class="fas fa-shopping-cart me-2"></i> Sales
+                    </a>
+                    <a href="{{ url_for('payments') }}" class="{% if request.endpoint == 'payments' %}active{% endif %}">
+                        <i class="fas fa-credit-card me-2"></i> Payments
+                    </a>
+                    <a href="{{ url_for('equipment') }}" class="{% if request.endpoint == 'equipment' %}active{% endif %}">
+                        <i class="fas fa-tools me-2"></i> Equipment
+                    </a>
+
+                    <div class="px-3 py-2 text-uppercase small text-muted">System</div>
+                    <a href="{{ url_for('messages') }}" class="{% if request.endpoint == 'messages' %}active{% endif %}">
+                        <i class="fas fa-envelope me-2"></i> Messaging
+                    </a>
+                    <a href="{{ url_for('logout') }}" class="mb-4">
                         <i class="fas fa-sign-out-alt me-2"></i> Logout
                     </a>
                 </div>

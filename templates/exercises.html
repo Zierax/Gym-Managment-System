@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Exercises{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Exercise Library</h5>
+        <a href="{{ url_for('add_exercise') }}" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus me-1"></i> Add Exercise
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ex in exercises %}
+                    <tr>
+                        <td>{{ ex.name }}</td>
+                        <td><span class="badge bg-info">{{ ex.category }}</span></td>
+                        <td>{{ ex.description[:50] }}{% if ex.description|length > 50 %}...{% endif %}</td>
+                        <td>
+                            <a href="{{ url_for('edit_exercise', id=ex.id) }}" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
+                            <a href="{{ url_for('delete_exercise', id=ex.id) }}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this exercise?')"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

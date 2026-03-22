@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm col-md-6 mx-auto">
+    <div class="card-header bg-white">
+        <h5 class="mb-0">Class Details</h5>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="name" class="form-label">Class Name</label>
+                <input type="text" class="form-control" id="name" name="name" value="{{ gym_class.name if gym_class else '' }}" placeholder="e.g. Morning Yoga" required>
+            </div>
+            <div class="mb-3">
+                <label for="trainer_id" class="form-label">Trainer</label>
+                <select class="form-select" id="trainer_id" name="trainer_id" required>
+                    <option value="">Select Trainer...</option>
+                    {% for trainer in trainers %}
+                    <option value="{{ trainer.id }}" {% if gym_class and gym_class.trainer_id == trainer.id %}selected{% endif %}>{{ trainer.name }} ({{ trainer.specialty }})</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <label for="schedule_time" class="form-label">Schedule Time</label>
+                    <input type="text" class="form-control" id="schedule_time" name="schedule_time" value="{{ gym_class.schedule_time if gym_class else '' }}" placeholder="e.g. Mon 10:00 AM" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="capacity" class="form-label">Capacity</label>
+                    <input type="number" class="form-control" id="capacity" name="capacity" value="{{ gym_class.capacity if gym_class else '' }}" required>
+                </div>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+                <a href="{{ url_for('classes') }}" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Save Class</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

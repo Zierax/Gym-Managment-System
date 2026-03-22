@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% block title %}Workout Templates{% endblock %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">All Workouts</h5>
+        <a href="{{ url_for('add_workout') }}" class="btn btn-primary btn-sm">
+            <i class="fas fa-plus me-1"></i> Add Workout Template
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            {% for workout in workouts %}
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0 bg-light">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary">{{ workout.title }}</h5>
+                        <p class="card-text small text-muted">{{ workout.description }}</p>
+                        <h6>Exercises:</h6>
+                        <ul class="list-unstyled">
+                            {% for ex in workout.exercises %}
+                            <li><i class="fas fa-check-circle text-success me-2"></i>{{ ex.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
